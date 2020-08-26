@@ -1,7 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, Dispatch, SetStateAction } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { AppBar, Toolbar as MuiToolbar, IconButton, Typography, Tabs, Tab } from '@material-ui/core';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { AppBar, Toolbar as MuiToolbar, IconButton, Typography, Tabs as MuiTabs, Tab } from '@material-ui/core';
+import { makeStyles, Theme, createStyles, withStyles } from '@material-ui/core/styles';
+import { BookSection } from '../index';
+
+const Tabs = withStyles({
+	indicator: {
+		height: 3,
+		backgroundColor: '#fff'
+	}
+})(MuiTabs);
 
 const useStyles = makeStyles(({ spacing, typography, palette, shadows }: Theme) =>
 	createStyles({
@@ -15,7 +23,7 @@ const useStyles = makeStyles(({ spacing, typography, palette, shadows }: Theme) 
 			color: palette.text.primary
 		},
 		header: {
-			background: palette.background.paper,
+			background: palette.primary.main,
 			top: -1,
 			//flexWrap: 'wrap',
 			'& > .MuiToolbar-regular': {
@@ -23,26 +31,25 @@ const useStyles = makeStyles(({ spacing, typography, palette, shadows }: Theme) 
 			}
 		},
 		isSticky: {
+			paddingTop: 1,
 			boxShadow: shadows[4],
 			'& > .MuiToolbar-regular': {
-				minHeight: 50
+				// minHeight: 50
 			},
 			'& $tabs': {
-				marginTop: spacing(-2),
+				// marginTop: spacing(-2),
 			}
 		},
 		tabs: {
-			marginTop: spacing(-1.5),
+			// marginTop: spacing(-1.5),
 			width: '100%'
 		}
 	})
 );
 
-function Toolbar() {
+function Toolbar({ tab, changeTab }: Props) {
 
 	const c = useStyles();
-
-	const [tab, setTab] = useState(0);
 
 	useEffect(() => {
 		const header = document.getElementById('header');
@@ -61,7 +68,7 @@ function Toolbar() {
 		}
 	});
 
-	const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => setTab(newValue);
+	const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => changeTab(newValue);
 
 	return (
 		<AppBar id='header' position='sticky' elevation={0} color='transparent' className={c.header}>
@@ -81,5 +88,12 @@ function Toolbar() {
 		</AppBar>
 	);
 }
+
+interface ToolbarProps {
+	tab: BookSection
+	changeTab: (tab: BookSection) => void
+}
+
+type Props = ToolbarProps
 
 export default Toolbar;
