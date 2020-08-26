@@ -16,7 +16,7 @@ class BookApi extends Api {
 	public searchBooks(query: string, type: 'title' | 'author'): Promise<BookData[]> {
 		// TODO - Validation
 		return this.get<BookData[]>(
-			`/book?${type}=${encodeURIComponent(query)}`
+			`/book/search?${type}=${encodeURIComponent(query)}`
 		).then((response: AxiosResponse) => {
 			const { data } = response;
 

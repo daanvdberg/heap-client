@@ -4,7 +4,7 @@ export const apiConfig = {
 	returnRejectedPromiseOnError: true,
 	withCredentials: true,
 	timeout: 30000,
-	baseURL: 'http://localhost:3000/api',
+	baseURL: 'http://localhost:5000/api',
 	headers: {
 		common: {
 			'Cache-Control': 'no-cache, no-store, must-revalidate',
