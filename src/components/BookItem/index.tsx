@@ -1,9 +1,13 @@
-import React from 'react';
-import { Typography, Grid, Box, ButtonGroup, Button } from '@material-ui/core';
-import { Rating } from '@material-ui/lab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box, Button, ButtonGroup, Grid, Typography } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { BookData } from '../../containers/BookProvider/types';
+import { Rating } from '@material-ui/lab';
+import React from 'react';
+import LinesEllipsis from 'react-lines-ellipsis';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import { actions as BookActions } from '../../containers/BookProvider/actions';
+import { BookData, BookStatus } from '../../containers/BookProvider/types';
 import BookCover from '../BookCover';
 
 const styles = makeStyles(
@@ -14,8 +18,12 @@ const styles = makeStyles(
 	})
 );
 
-function BookItem({ book }: Props) {
+function BookItem({ book, saveBook }: Props) {
+
 	const c = styles();
+
+	const handleSaveBook = (status = BookStatus.WantToRead) => () => saveBook(book, status);
+
 	return (
 		<Grid container spacing={2}>
 			<Grid item xs='auto' style={{ width: 90 }}>
@@ -23,8 +31,16 @@ function BookItem({ book }: Props) {
 			</Grid>
 			<Grid item xs>
 				<Box pb={1}>
-					<Typography variant='body2'>{book.title}</Typography>
-					<Typography variant='caption'>by {book.author}</Typography>
+					<Typography component='div' variant='body2' title={book.title}>
+						<LinesEllipsis
+							text={book.title}
+							maxLine='3'
+							ellipsis='...'
+							trimRight
+							basedOn='words'
+						/>
+					</Typography>
+					{book.author && <Typography variant='caption'>by {book.author}</Typography>}
 				</Box>
 				<Grid container alignItems='center'>
 					<Box ml={-0.25} mt={-0.125}>
@@ -39,7 +55,7 @@ function BookItem({ book }: Props) {
 				</Grid>
 				<Box pt={1}>
 					<ButtonGroup variant='contained' color='primary' size='small' aria-label='book action'>
-						<Button>Want to Read</Button>
+						<Button onClick={handleSaveBook()}>Want to Read</Button>
 						<Button>
 							<FontAwesomeIcon icon={['fas', 'caret-down']} fixedWidth />
 						</Button>
@@ -54,6 +70,21 @@ interface DirectProps {
 	book: BookData
 }
 
-type Props = DirectProps
+interface DispatchFromProps {
+	saveBook: (book: BookData, status: BookStatus) => void
+}
 
-export default BookItem;
+type Props = DirectProps & DispatchFromProps
+
+function mapDispatchToProps(dispatch: Dispatch): DispatchFromProps {
+	return {
+		saveBook: (book, status) => dispatch(BookActions.saveBook(book, status))
+	};
+}
+
+const withConnect = connect(
+	null,
+	mapDispatchToProps
+);
+
+export default withConnect(BookItem);

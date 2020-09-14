@@ -7,6 +7,7 @@ class BookApi extends Api {
 		super(config);
 
 		this.searchBooks = this.searchBooks.bind(this);
+		this.saveBook = this.saveBook.bind(this);
 	}
 
 	/**
@@ -23,6 +24,22 @@ class BookApi extends Api {
 			const state: BookData[] = data;
 
 			return state;
+		}).catch((error: AxiosError) => {
+			throw error;
+		});
+	}
+
+	/**
+	 * Save a book in your personal list
+	 * @returns {Promise} saveBook - save book
+	 */
+	public saveBook(book: BookData): Promise<BookData> {
+		return this.post<any>(`/book`, JSON.stringify(book)).then((response: AxiosResponse) => {
+			const { data } = response;
+
+			console.log(data);
+
+			return data;
 		}).catch((error: AxiosError) => {
 			throw error;
 		});

@@ -85,7 +85,6 @@ function Search({ results, searchBooks, resetResults, match: { params }, history
 						inputRef={register}
 					/>
 					<FormControl className={c.typeField} variant='outlined' size='small'>
-						<InputLabel id='type-label'><FontAwesomeIcon icon={['far', 'books']} /></InputLabel>
 						<Select
 							id='searchType'
 							labelId='type-label'
@@ -98,7 +97,7 @@ function Search({ results, searchBooks, resetResults, match: { params }, history
 						</Select>
 					</FormControl>
 					<Divider className={c.divider} orientation='vertical' />
-					<IconButton aria-label='submit search' className={c.submit} onClick={handleSubmit(onSubmit)}>
+					<IconButton type='submit' aria-label='submit search' className={c.submit} onClick={handleSubmit(onSubmit)}>
 						<FontAwesomeIcon icon={['fal', 'search']} size='xs' />
 					</IconButton>
 				</Paper>
